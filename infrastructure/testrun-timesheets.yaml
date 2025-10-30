@@ -1,0 +1,19 @@
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: timesheets-load
+  namespace: k6-operator
+spec:
+  parallelism: 1
+  script:
+    localFile: /scripts/tests/timesheets.js
+  arguments: --tag env=local --tag plan=timesheets --tag build=${BUILD_TAG:-demo-001}
+  runner:
+    image: k6-runner:demo
+    env:
+      - name: BASE_URL
+        value: "https://httpbin.test.k6.io"
+      - name: K6_OUT
+        value: "experimental-prometheus-rw"
+      - name: K6_PROMETHEUS_RW_SERVER_URL
+        value: "http://kps-kube-prometheus-stack-prometheus.monitoring.svc:9090/api/v1/write"
