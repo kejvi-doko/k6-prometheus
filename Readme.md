@@ -1,38 +1,33 @@
-```bash
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-```
+## Overview
 
-```bash
-helm upgrade --install kps prometheus-community/kube-prometheus-stack \
-  -n monitoring \
-  -f infrastructure/helm/prometheus/values.yaml
-```
+A small local setup to test k6 with Prometheus, used to track performance indicators across multiple runs/builds.
 
-```bash
-helm upgrade --install grafana grafana/grafana -n monitoring -f infrastructure/helm/grafana/values.yaml
-```
+### Prerequisites
 
-```bash
-helm upgrade --install k6-operator grafana/k6-operator \
-  -n k6-operator \
-  -f infrastructure/helm/k6-operator/values.yaml
-```
+- kind: [Install kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- kubectl: [Install kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- Helm: [Install Helm](https://helm.sh/docs/intro/install/)
+
+### Quick start
+
+1. Build the k6 runner image and load it into kind:
 
 ```bash
 docker build -t k6-runner:demo -f perf/Dockerfile.k6 perf
 kind load docker-image k6-runner:demo --name perf
 ```
 
-```bash
-kubectl -n k6-operator delete testrun timesheets-load --ignore-not-found
-
-BUILD_TAG=demo-002 envsubst < testrun-timesheets.yaml | kubectl apply -f -
-```
-
-##GetToken##
+2. Provision Prometheus, Grafana, and the k6-operator (run from the `infrastructure` folder):
 
 ```bash
-kubectl -n monitoring get secret kps-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo
+cd infrastructure
+./prepare.sh
 ```
+
+3. Run the test (still in the `infrastructure` folder):
+
+```bash
+./run.sh
+```
+
+Grafana uses Prometheus as a datasource to visualize k6 metrics across builds.
