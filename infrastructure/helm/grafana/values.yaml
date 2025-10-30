@@ -1,0 +1,23 @@
+adminUser: admin
+adminPassword: admin
+service:
+  type: ClusterIP
+persistence:
+  enabled: true
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://kps-kube-prometheus-prometheus.monitoring.svc:9090
+        isDefault: true
+dashboardsProvider:
+  enabled: true
+dashboards:
+  default:
+    k6:
+      gnetId: 17483
+      revision: 1
+      datasource: Prometheus

@@ -1,0 +1,23 @@
+# infrastructure/helm/k6-operator/values.yaml  (for grafana/k6-operator)
+manager:
+  # Only override the controller image if you really need to.
+  # image:
+  #   repository: ghcr.io/grafana/k6-operator
+  #   tag: controller-v1.0.0
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  # If you want the operator to watch a specific namespace(s), set one of:
+  # env:
+  #   - name: WATCH_NAMESPACE
+  #     value: "k6-operator"
+  #   # or
+  #   - name: WATCH_NAMESPACES
+  #     value: "k6-operator,another-ns"
+  
