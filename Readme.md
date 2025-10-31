@@ -30,4 +30,16 @@ cd infrastructure
 ./run.sh
 ```
 
+4. Port-Forward Grafana
+
+```bash
+kubectl -n monitoring port-forward svc/kps-grafana 3000:80
+```
+
+5. Get Grafana Password
+
+```bash
+kubectl -n monitoring get secret kps-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo
+```
+
 Grafana uses Prometheus as a datasource to visualize k6 metrics across builds.
