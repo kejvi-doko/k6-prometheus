@@ -7,7 +7,7 @@ spec:
   parallelism: 1
   script:
     localFile: /scripts/tests/timesheets.js
-  arguments: --tag env=local --tag plan=timesheets --tag build=${BUILD_TAG:-demo-005}
+  arguments: --tag env=local --tag plan=timesheets --tag build=${BUILD_TAG}
   runner:
     image: k6-runner:demo
     env:
